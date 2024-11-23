@@ -1,6 +1,8 @@
-let rows = 100;
-let cols = 26;
+let sheetRows = 100;
+let sheetCols = 26;
 
+
+const grid = document.querySelector(".grid-container");
 let addressColCont = document.querySelector(".address-col-cont");
 let addressRowCont = document.querySelector(".address-row-cont");
 let cellsCont = document.querySelector(".cells-cont");
@@ -14,55 +16,73 @@ const addListenerForAddressBarDisplay = (cell, i, j) => {
     })
 }
 
-const gridSetup = () => {
-    // Create rows and columns in memory before appending to the DOM to reduce reflows
+const setGridRows = (start = 0, rows) => {
     const addressColFragment = document.createDocumentFragment();
-    const addressRowFragment = document.createDocumentFragment();
-    const cellsFragment = document.createDocumentFragment();
-
-    // Create address column (1 to rows)
-    for (let i = 0; i < rows; i++) {
+    for (let i = start; i < rows; i++) {
         const addressCol = document.createElement("div");
         addressCol.className = "address-col";
         addressCol.innerText = i + 1;
         addressColFragment.appendChild(addressCol);
     }
 
-    // Create address row (A to Z)
-    for (let i = 0; i < cols; i++) {
+    addressColCont.appendChild(addressColFragment);
+}
+
+const setGridCols = (start = 0, cols) => {
+    const addressRowFragment = document.createDocumentFragment();
+    for (let i = start; i < cols; i++) {
         const addressRow = document.createElement("div");
         addressRow.className = "address-row";
         addressRow.innerText = String.fromCharCode(65 + i);
         addressRowFragment.appendChild(addressRow);
     }
 
-    // Create cell grid
-    for (let i = 0; i < rows; i++) {
+    addressRowCont.appendChild(addressRowFragment);
+}
+
+const setGridCells = (start = 0, rows, cols) => {
+    const cellsFragment = document.createDocumentFragment();
+    
+    for (let i = start; i < rows; i++) {
         const rowCont = document.createElement("div");
         rowCont.className = "row-cont";
 
-        for (let j = 0; j < cols; j++) {
+        for (let j = start; j < cols; j++) {
             const cell = document.createElement("div");
             cell.className = "cell";
             cell.contentEditable = "true";
             cell.spellcheck = false;
 
-            // Set custom attributes for identification
             cell.setAttribute("rid", i);
             cell.setAttribute("cid", j);
 
             rowCont.appendChild(cell);
-            addListenerForAddressBarDisplay(cell, i, j); // Event listener for each cell
+            addListenerForAddressBarDisplay(cell, i, j);
         }
         cellsFragment.appendChild(rowCont);
     }
 
-    // Append fragments to DOM in one go
-    addressColCont.appendChild(addressColFragment);
-    addressRowCont.appendChild(addressRowFragment);
     cellsCont.appendChild(cellsFragment);
+}
+
+const gridSetup = () => {
+    setGridRows(0, sheetRows);
+    setGridCols(0, sheetCols);
+    setGridCells(0, sheetRows, sheetCols);  
 };
 
+const generateCols = () => {
+    if (sheetRows <= 300) {
+        const start = sheetRows;
+        sheetRows = start + 100
+        setGridRows(start, sheetRows)
+        setGridCols(0, sheetCols)
+        setGridCells(0, sheetRows, sheetCols);  
+    }
+}
+
 export {
-    gridSetup
+    gridSetup,
+    grid,
+    generateCols
 }
