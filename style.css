@@ -134,3 +134,126 @@ table {
 }
 
 /* page formula end */
+
+/* grid css start */
+
+.grid-container {
+    height: calc( 100vh - 150px );
+    position: relative;
+    overflow: scroll;
+    background-color: #ecf0f1;
+}
+
+.top-left-dummy-box {
+    height: 2rem;
+    width: 2rem;
+    background-color: #747d8c;
+    position: fixed;
+    z-index: 4;
+}
+.address-col-cont {
+    position: sticky;
+    top: 2rem;
+    left: 0;
+}
+.address-row-cont {
+    display: flex;
+    position: sticky;
+    top: 0;
+    left: 2rem;
+    background: #ecf0f1;
+}
+.cells-cont {
+    position: absolute;
+    top: 0;
+    left: 2rem;
+}
+
+.address-col {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #dfe4ea;
+}
+.address-row {
+    height: 2rem;
+    width: 5rem;
+    border: 1px solid #dfe4ea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.row-cont {
+    display: flex;
+    background: #fff;
+}
+.cell {
+    height: 2rem;
+    width: 5rem;
+    border: 1px solid #dfe4ea;
+    outline: none;
+}
+
+.color-prop {
+    position: relative;
+}
+.color-prop > input {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* grid css end */
+
+/* sheet action start */
+
+.sheet-actions-container {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    gap: 1rem;
+    background-color: #ecf0f1;
+}
+.sheet-actions-container > * {
+    display: inline-block;
+}
+.sheet-add-icon {
+    width: 2vw;
+}
+.sheet-add-icon:hover {
+    cursor: default;
+}
+
+.sheets-folder-container {
+    display: flex;
+    align-items: center;
+    height: 80%;
+    width: 5rem;
+    width: calc( 100vw - 2vw );
+    overflow: auto;
+}
+.sheet-folder {
+    height: 80%;
+    text-decoration: underline;
+    font-weight: bold;
+    text-decoration-thickness: 3px;
+    font-size: 0.9rem;
+    /* background-color: lightblue; */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sheet-content {
+    width: 5rem;
+    /* background-color: lightgreen; */
+}
+
+/* sheet action end */
