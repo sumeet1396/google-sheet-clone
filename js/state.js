@@ -1,20 +1,8 @@
-// let sheetDB = [];
-
-// export function getSheetDB() {
-//     return sheetDB;
-// }
-
-// export function setSheetDB(newData) {
-//     sheetDB = newData;
-//     console.log("sheetDB updated:", sheetDB);
-// }
-
-export const state = {
+const state = {
     sheetDB: []
 };
 
-// Create a reactive proxy
-export const reactiveState = new Proxy(state, {
+const reactiveState = new Proxy(state, {
     set(target, key, value) {
         target[key] = value;
         console.log(`State updated: ${key} =`, value);
@@ -23,3 +11,8 @@ export const reactiveState = new Proxy(state, {
         return true;
     }
 });
+
+export {
+    state,
+    reactiveState
+}

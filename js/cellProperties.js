@@ -2,10 +2,12 @@ import { addressBar } from "./grid.js";
 import { reactiveState } from './state.js';
 
 
-let activeColorProp = "#d1d8e0";
-let inactiveColorProp = "#ecf0f1";
+const activeColorProp = "#d1d8e0";
+const inactiveColorProp = "#ecf0f1";
+const topbarClickActions = ['bold', 'italic', 'underline', 'leftAlign', 'centerAlign','rightAlign'] 
+const topbarChangeAction = ['fontSize', 'fontFamily', 'fontColor', 'BGcolor'];
 
-function initializeSheetDB(rows, cols) {
+const initializeSheetDB = (rows, cols) => {
     const sheetDB = []
     for (let i = 0; i < rows; i++) {
         let sheetRows = []
@@ -28,14 +30,14 @@ function initializeSheetDB(rows, cols) {
     reactiveState.sheetDB = sheetDB;
 }
 
-function decodeRIDCIDFromAddress(address) {
+const decodeRIDCIDFromAddress = (address) => {
     // address -> "A1"
     let rid = Number(address.slice(1) - 1); // "1" -> 0
     let cid = Number(address.charCodeAt(0)) - 65; // "A" -> 65
     return [rid, cid];
 }
 
-function getCellAndCellProp(address) {
+const getCellAndCellProp = (address) => {
     let sheetDB = reactiveState.sheetDB;
     let [rid, cid] = decodeRIDCIDFromAddress(address);
     // Access cell & storage object
@@ -44,13 +46,14 @@ function getCellAndCellProp(address) {
     return [cell, cellProp];
 }
 
-function handleToolbarClick(e) {
+const handleToolbarClick = (e) => {
     let action = e.target.dataset.action;
+    const elm = e.target;
     if (!action) return;
 
     let address = addressBar.value; // Current cell address
     let [cell, cellProp] = getCellAndCellProp(address);
-    console.log({action})
+
     switch (action) {
         case "bold":
             cellProp.bold = !cellProp.bold;
@@ -73,7 +76,6 @@ function handleToolbarClick(e) {
             // e.target.style.backgroundColor = cellProp.underline ? activeColorProp : inactiveColorProp;
             break;
         case "centerAlign":
-            console.log("CENTER")
             cellProp.alignment = 'center'; 
             cell.style.textAlign = cellProp.alignment;
             // e.target.style.backgroundColor = cellProp.underline ? activeColorProp : inactiveColorProp;
@@ -86,12 +88,20 @@ function handleToolbarClick(e) {
         default:
             console.warn(`Unknown action: ${action}`);
     }
+
+    bold.style.backgroundColor = cellProp.bold ? activeColorProp : inactiveColorProp;
+    italic.style.backgroundColor = cellProp.italic ? activeColorProp : inactiveColorProp;
+    underline.style.backgroundColor = cellProp.underline ? activeColorProp : inactiveColorProp;
+    fontColor.value = cellProp.fontColor;
+    BGcolor.value = cellProp.BGcolor;
+    fontSize.value = cellProp.fontSize;
+    fontFamily.value = cellProp.fontFamily;
 }
 
-function handleToolbarChange(e) {
+const handleToolbarChange = (e) => {
     const action = e.target.dataset.action;
     const elm = e.target; 
-    console.log({action, elm})
+
     if (!action) return;
 
     let address = addressBar.value; 
@@ -123,8 +133,19 @@ function handleToolbarChange(e) {
     }
 }
 
+const handleTopbarState = (address) => {
+    let [cell, cellProp] = getCellAndCellProp(address)
+    topbarClickActions.map((elm) => {
+        document.querySelector(`[data-action="${elm}"]`).style.backgroundColor = cellProp?.[elm] ? activeColorProp : inactiveColorProp
+    })
+
+    topbarChangeAction.map((elm) => {
+        document.querySelector(`[data-action="${elm}"]`).value = cellProp?.[elm]
+    })
+}
+
 // Attach event listeners dynamically
-function setupCellEventListeners() {
+const setupCellEventListeners = () => {
     // Toolbar event listener
     const toolbar = document.querySelector(".toolbar");
     toolbar.addEventListener("click", handleToolbarClick);
@@ -147,7 +168,7 @@ function setupCellEventListeners() {
             activeCells[0].classList.remove("active-cell");
             activeCells[1].classList.remove("active-cell");
         }
-        console.log({col, row});
+
         //get active cell
         const element = document.querySelector(".cell-border");
 
@@ -161,6 +182,7 @@ function setupCellEventListeners() {
             let cid = e.target.getAttribute("cid");
             let address = `${String.fromCharCode(65 + Number(cid))}${Number(rid) + 1}`;
             addressBar.value = address;
+            handleTopbarState(address)
         }
     });
 }
