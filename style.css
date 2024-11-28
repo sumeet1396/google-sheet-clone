@@ -208,6 +208,15 @@ table {
     width: 100%;
 }
 
+.cell-border {
+    border-color: #000 !important;
+}
+
+.active-cell {
+    background-color: #bceff5 !important;
+    color: #fff !important;
+}
+
 /* grid css end */
 
 /* sheet action start */
