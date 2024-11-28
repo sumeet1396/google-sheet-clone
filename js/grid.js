@@ -15,12 +15,10 @@ const addListenerForAddressBarDisplay = (cell, i, j) => {
 }
 
 const gridSetup = () => {
-    // Create rows and columns in memory before appending to the DOM to reduce reflows
     const addressColFragment = document.createDocumentFragment();
     const addressRowFragment = document.createDocumentFragment();
     const cellsFragment = document.createDocumentFragment();
 
-    // Create address column (1 to rows)
     for (let i = 0; i < rows; i++) {
         const addressCol = document.createElement("div");
         addressCol.className = "address-col";
@@ -28,7 +26,6 @@ const gridSetup = () => {
         addressColFragment.appendChild(addressCol);
     }
 
-    // Create address row (A to Z)
     for (let i = 0; i < cols; i++) {
         const addressRow = document.createElement("div");
         addressRow.className = "address-row";
@@ -36,7 +33,6 @@ const gridSetup = () => {
         addressRowFragment.appendChild(addressRow);
     }
 
-    // Create cell grid
     for (let i = 0; i < rows; i++) {
         const rowCont = document.createElement("div");
         rowCont.className = "row-cont";
@@ -47,22 +43,23 @@ const gridSetup = () => {
             cell.contentEditable = "true";
             cell.spellcheck = false;
 
-            // Set custom attributes for identification
             cell.setAttribute("rid", i);
             cell.setAttribute("cid", j);
 
             rowCont.appendChild(cell);
-            addListenerForAddressBarDisplay(cell, i, j); // Event listener for each cell
+            addListenerForAddressBarDisplay(cell, i, j); 
         }
         cellsFragment.appendChild(rowCont);
     }
 
-    // Append fragments to DOM in one go
     addressColCont.appendChild(addressColFragment);
     addressRowCont.appendChild(addressRowFragment);
     cellsCont.appendChild(cellsFragment);
 };
 
 export {
-    gridSetup
+    gridSetup,
+    rows,
+    cols,
+    addressBar
 }
